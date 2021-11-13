@@ -28,23 +28,14 @@
           <li
             v-for="(tab, index) in containerTabList"
             :key="tab.index"
-            @mouseover="SelectLi(index)"
+            @click="SelectLi(index)"
             :class="{ isActive: SelectedLi === index }"
           >
-            {{ tab.tabName }}
-            <!-- <img v-lazy="newItem.picUrl" /> -->
+            <router-link :to="tab.toPath">{{ tab.tabName }}</router-link>
           </li>
         </ul>
         <div class="content">
-          <ul>
-            <li class="content01">篮球</li>
-          </ul>
-          <ul>
-            <li class="content02">国际足球</li>
-          </ul>
-          <ul>
-            <li class="content03">中国足球</li>
-          </ul>
+          <router-view></router-view>
         </div>
       </div>
     </div>
@@ -96,39 +87,21 @@ export default {
       containerTabList: [
         {
           tabName: "篮球",
-          basketball: [
-            {
-              title: "准！胡金秋打出高效神奇一战 全场17投16中",
-              imgUrl: require("../assets/b1.jpg"),
-              videoURL: "",
-            },
-          ],
+          toPath: "Basketball",
         },
         {
           tabName: "国际足球",
-          InterFootball: [
-            {
-              title: "[德甲]握手言和 美因茨主场与门兴战平",
-              imgUrl: require("../assets/g1.jpg"),
-              videoURL: "",
-            },
-          ],
+          toPath: "Interfootball",
         },
         {
           tabName: "中国足球",
-          chinaFootball: [
-            {
-              title: "[德甲]握手言和 美因茨主场与门兴战平",
-              imgUrl: require("../assets/c1.jpg"),
-              videoURL: "",
-            },
-          ],
+          toPath: "Chinesefootball",
         },
       ],
       current: 0, //默认显示图片
       SelectedLi: 0,
-      show: false,
       timer: null, //定时器
+      routerUrl: "", //跳转的地址
     };
   },
   methods: {
@@ -142,9 +115,14 @@ export default {
         this.newsList(this.nextIndex);
       }, 3000);
     },
+    //球类标题
     SelectLi(index) {
       this.SelectedLi = index;
-      // console.log(this.SelectedLi === index);
+      this.routerUrl = this.containerTabList[index].toPath;
+      // console.log(this.containerTabList[index].toPath);
+      console.log(this.routerUrl);
+      // this.$router.push({ puth: this.routerUrl });
+      console.log(index);
     },
   },
   created() {
@@ -176,7 +154,8 @@ export default {
 #home {
   background: url("https://p1.img.cctvpic.com/photoAlbum/templet/common/DEPA1563326600105320/bg1_02.jpg");
   width: 100%;
-  height: 100%;
+  min-height: 2000px;
+  background-size: 100%;
 
   .home-head {
     position: relative;
@@ -240,14 +219,15 @@ export default {
   .home-footer-container {
     width: 800px;
     min-height: 200px;
-    border: 1px solid red;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 30px;
+    position: relative;
+
     .home-footer-container-tab {
+      top: 0px;
       width: 800px;
       height: 51px;
-      // position: fixed;
-      border: 1px solid green;
       .home-footer-container-tab-list {
         display: flex;
         justify-content: center;
@@ -255,17 +235,30 @@ export default {
         li {
           width: 160px;
           height: 50px;
-          font-size: 18px;
-          line-height: 51px;
           text-align: center;
-          color: #666666;
-          border-bottom: solid 1 px #f5f5f5;
+          a {
+            font-size: 18px;
+            line-height: 51px;
+            color: #666666;
+            border-bottom: solid 1 px #f5f5f5;
+            display: block;
+            width: 100%;
+            height: 51px;
+          }
         }
+
         .isActive {
           background: red;
-          color: #fff;
-          font-weight: 600;
+          a {
+            color: #fff;
+            font-weight: 600;
+          }
         }
+      }
+      .content {
+        width: 100%;
+        min-height: 200px;
+        border: 1px solid red;
       }
     }
   }

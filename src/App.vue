@@ -14,7 +14,16 @@
 export default {
   name: "App",
   data() {
-    return {};
+    return {
+      mounted() {
+        window.addEventListener("unload", this.saveState); //刷新页面，把值保存到浏览器
+      },
+      methods: {
+        saveState() {
+          sessionStorage.setItem("state", JSON.stringify(this.$store.state));
+        },
+      },
+    };
   },
 };
 </script>
